@@ -1,4 +1,11 @@
-import { Box, Button, Flex, Text, useMediaQuery } from "@chakra-ui/react";
+import {
+	Box,
+	Button,
+	Divider,
+	Flex,
+	Text,
+	useMediaQuery,
+} from "@chakra-ui/react";
 import { IListingExtended } from "../../types/types";
 import { Listing } from "../../components/Listing";
 import { useNavigate } from "react-router-dom";
@@ -26,18 +33,27 @@ export const HistoryView = ({ listings }: { listings: IListingExtended[] }) => {
 					<Text>First appearance</Text>
 					<Text>{listings[listings.length - 1].createdAt}</Text>
 					{isSmallerThan800 && (
-						<Box>
-							<Text>Latest appearance</Text>
-							<Text>{listings[0].createdAt}</Text>
-						</Box>
+						<>
+							<Divider />
+							<Box pb={4}>
+								<Text>Latest appearance</Text>
+								<Text>{listings[0].createdAt}</Text>
+							</Box>
+						</>
 					)}
-					<Listing car={listings[listings.length - 1]} />
+					<Listing
+						isHistory
+						car={listings[listings.length - 1]}
+					/>
 				</Box>
 				{!!(listings.length - 1) && !isSmallerThan800 && (
 					<Box>
 						<Text>Latest appearance</Text>
 						<Text>{listings[0].createdAt}</Text>
-						<Listing car={listings[0]} />
+						<Listing
+							isHistory
+							car={listings[0]}
+						/>
 					</Box>
 				)}
 			</Flex>

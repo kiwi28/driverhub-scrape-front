@@ -8,7 +8,7 @@ import {
 	useMediaQuery,
 } from "@chakra-ui/react";
 import { ISnapshot } from "../../types/types";
-import { Listing, ListingMobile } from "../../components/Listing";
+import { Listing } from "../../components/Listing";
 import { useCallback, useState } from "react";
 
 interface HomeViewProps {
@@ -76,21 +76,14 @@ export const HomeView: React.FC<HomeViewProps> = ({ snapshots }) => {
 				gap={4}
 				w={"100%"}
 			>
-				{selectedSnapshot.cars.map((car) =>
-					isSmallerThan800 ? (
-						<ListingMobile
-							key={car.hash}
-							car={car}
-							isDetails={isDetails}
-						/>
-					) : (
-						<Listing
-							key={car.hash}
-							car={car}
-							isDetails={isDetails}
-						/>
-					)
-				)}
+				{selectedSnapshot.cars.map((car) => (
+					<Listing
+						key={car.hash}
+						car={car}
+						isDetails={isDetails}
+						isMoblie={isSmallerThan800}
+					/>
+				))}
 			</Flex>
 		</Box>
 	);

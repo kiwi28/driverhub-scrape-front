@@ -29,6 +29,7 @@ function App() {
 					alignItems={"center"}
 					justifyContent={"center"}
 					py={10}
+					color={"gray.300"}
 				>
 					<Box maxW={"1400px"}>
 						<RouterProvider router={router} />
