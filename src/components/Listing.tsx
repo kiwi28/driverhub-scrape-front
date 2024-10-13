@@ -23,11 +23,13 @@ export const Listing = ({
 	isDetails = true,
 	isMoblie = false,
 	isHistory = false, //used in history page, removes the button
+	isActive = true, //used to show if the listing is active or not
 }: {
 	car: IListing;
 	isDetails?: boolean;
 	isMoblie?: boolean;
 	isHistory?: boolean;
+	isActive?: boolean;
 }) => {
 	const navigate = useNavigate();
 	const [isSmallerThan800] = useMediaQuery("(max-width: 800px)");
@@ -40,11 +42,13 @@ export const Listing = ({
 		<VStack
 			w={isSmallerThan800 ? "100%" : 64}
 			p={2}
-			border={"1px solid darkgray"}
+			border={"1px solid "}
+			borderColor={isActive ? "darkgray" : "red.600"}
 			borderRadius={"lg"}
 			boxShadow={"md"}
 			alignItems={"flex-start"}
 			fontSize={isSmallerThan800 ? "sm" : undefined}
+			position={"relative"}
 		>
 			<Image
 				src={car.img}
@@ -62,6 +66,17 @@ export const Listing = ({
 			>
 				{car.price}
 			</Tag>
+			{!isActive && (
+				<Tag
+					bgColor={"red.600"}
+					position={"absolute"}
+					right={0}
+					top={0}
+				>
+					Inactive
+				</Tag>
+			)}
+
 			{!isHistory && (
 				<Button
 					w={"100%"}

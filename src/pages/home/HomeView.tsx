@@ -82,6 +82,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ snapshots }) => {
 						car={car}
 						isDetails={isDetails}
 						isMoblie={isSmallerThan800}
+						isActive={!!snapshots[0].cars.find((c) => c.hash === car.hash)}
 					/>
 				))}
 			</Flex>
