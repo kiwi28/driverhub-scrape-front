@@ -15,24 +15,38 @@ interface HomeViewProps {
 	snapshots: ISnapshot[];
 }
 
-export const HomeView: React.FC<HomeViewProps> = ({ snapshots }) => {
-	const [isDetails, setIsDetails] = useState<boolean>(true);
-	const [isSmallerThan800] = useMediaQuery("(max-width: 800px)");
+enum SortEnum {
+	PRICE_ASC = "price_asc",
+	PRICE_DESC = "price_desc",
+}
 
+export const HomeView: React.FC<HomeViewProps> = ({ snapshots }) => {
 	const [selectedSnapshot, setSelectedSnapshot] = useState<ISnapshot>(
 		snapshots[0]
 	);
+	const [isDetails, setIsDetails] = useState<boolean>(true);
+	const [sort, setSort] = useState<SortEnum>(SortEnum.PRICE_ASC);
 
-	const handleChangeSnapshot = (
-		event: React.ChangeEvent<HTMLSelectElement>
-	) => {
-		const snapshot = snapshots.find((snapshot) =>
-			event.target.value.includes(snapshot.created)
-		);
-		if (snapshot) {
-			setSelectedSnapshot(snapshot);
-		}
-	};
+	const [isSmallerThan800] = useMediaQuery("(max-width: 800px)");
+
+	const handleChangeSnapshot = useCallback(
+		(event: React.ChangeEvent<HTMLSelectElement>) => {
+			const snapshot = snapshots.find((snapshot) =>
+				event.target.value.includes(snapshot.created)
+			);
+			if (snapshot) {
+				setSelectedSnapshot(snapshot);
+			}
+		},
+		[snapshots]
+	);
+
+	const handleSort = useCallback(
+		(event: React.ChangeEvent<HTMLSelectElement>) => {
+			setSort(event.target.value as SortEnum);
+		},
+		[]
+	);
 
 	const handleToggleDetails = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,6 +71,20 @@ export const HomeView: React.FC<HomeViewProps> = ({ snapshots }) => {
 					))}
 				</Select>
 			</FormLabel>
+			<FormLabel
+				mb={4}
+				w={"100%"}
+				maxW={96}
+			>
+				Sort by:
+				<Select
+					onChange={handleSort}
+					defaultValue={sort}
+				>
+					<option value={SortEnum.PRICE_ASC}>Price ascending</option>
+					<option value={SortEnum.PRICE_DESC}>Price descending</option>
+				</Select>
+			</FormLabel>
 			<HStack
 				mb={6}
 				alignItems={"center"}
@@ -76,15 +104,22 @@ export const HomeView: React.FC<HomeViewProps> = ({ snapshots }) => {
 				gap={4}
 				w={"100%"}
 			>
-				{selectedSnapshot.cars.map((car) => (
-					<Listing
-						key={car.hash}
-						car={car}
-						isDetails={isDetails}
-						isMoblie={isSmallerThan800}
-						isActive={!!snapshots[0].cars.find((c) => c.hash === car.hash)}
-					/>
-				))}
+				{selectedSnapshot.cars
+					.sort((a, b) => {
+						if (sort === SortEnum.PRICE_ASC) {
+							return parseInt(a.price) - parseInt(b.price);
+						}
+						return parseInt(b.price) - parseInt(a.price);
+					})
+					.map((car) => (
+						<Listing
+							key={car.hash}
+							car={car}
+							isDetails={isDetails}
+							isMoblie={isSmallerThan800}
+							isActive={!!snapshots[0].cars.find((c) => c.hash === car.hash)}
+						/>
+					))}
 			</Flex>
 		</Box>
 	);
