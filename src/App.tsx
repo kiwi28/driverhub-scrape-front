@@ -24,12 +24,12 @@ function App() {
 		<QueryClientProvider client={queryClient}>
 			<ChakraProvider theme={theme}>
 				<Flex
-					flex={1}
 					direction="column"
 					alignItems={"center"}
 					justifyContent={"center"}
 					py={10}
 					color={"gray.300"}
+					minH={"100vh"}
 				>
 					<Box maxW={"1400px"}>
 						<RouterProvider router={router} />
